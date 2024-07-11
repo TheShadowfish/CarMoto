@@ -6,7 +6,7 @@ from rest_framework.filters import OrderingFilter
 from vehicle.models import Car, Moto, Mileage
 from vehicle.serializers import CarSerializer, MotoSerializer, MileageSerializer, MotoMileageSerializer, \
     MotoCreateSerializer
-
+from django_filters import rest_framework as filters
 
 class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
@@ -44,10 +44,22 @@ class MotoMileageListAPIView(generics.ListAPIView):
     queryset = Mileage.objects.filter(moto__isnull = False)
     serializer_class = MotoMileageSerializer
 
+class MileageFilter(filters.FilterSet):
+    # filter_queryset = Mileage.objects.all()
+    car = filters.ModelChoiceFilter(queryset=Car.objects.all(), null_label='null')
+    moto = filters.ModelChoiceFilter(queryset=Moto.objects.all(), null_label='null')
+
+class Meta:
+    model = Mileage
+    fields = ['car', 'moto']
 
 class MileageListAPIView(generics.ListAPIView):
     serializer_class = MileageSerializer
     queryset = Mileage.objects.all()
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ('car', 'moto')
+    # filterset_class = MileageFilter
+    # filterset_fields = ('car', 'moto')
+    filterset_class = MileageFilter
     ordering_fields = ('year',)
+
+
