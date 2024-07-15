@@ -1,0 +1,1 @@
+[{"model": "users.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$600000$aqxgnNkIk2ZIIkAkYfI6Yz$DNAIKtaseyeDLcg6ZnH3yfrCLHQ0gy6rh4s+Po+AhJk=", "last_login": null, "is_superuser": true, "username": "drakot", "first_name": "", "last_name": "", "email": "", "is_staff": true, "is_active": true, "date_joined": "2024-07-15T07:20:40.994Z", "groups": [], "user_permissions": []}}]
