@@ -2,9 +2,10 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
 from rest_framework.filters import OrderingFilter
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from vehicle.models import Car, Moto, Mileage
+from vehicle.paginators import VehiclePaginator
 from vehicle.permissions import IsOwnerOrStaff
 from vehicle.serializers import CarSerializer, MotoSerializer, MileageSerializer, MotoMileageSerializer, \
     MotoCreateSerializer
@@ -13,7 +14,8 @@ from django_filters import rest_framework as filters
 class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    # permission_classes = [IsAuthenticated]
 
 
 class MotoCreateAPIView(generics.CreateAPIView):
@@ -28,6 +30,7 @@ class MotoCreateAPIView(generics.CreateAPIView):
 class MotoListAPIView(generics.ListAPIView):
     serializer_class = MotoSerializer
     queryset = Moto.objects.all()
+    pagination_class = VehiclePaginator
 
 
 class MotoRetrieveAPIView(generics.RetrieveAPIView):

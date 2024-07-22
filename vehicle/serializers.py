@@ -9,8 +9,8 @@ class MileageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CarSerializer(serializers.ModelSerializer):
-    last_mileage = serializers.IntegerField(source='mileage.all.first.mileage')
-    mileage = MileageSerializer(many=True)
+    last_mileage = serializers.IntegerField(source='mileage.all.first.mileage', read_only=True)
+    mileage = MileageSerializer(many=True, read_only=True)
     class Meta:
         model = Car
         fields = '__all__'
