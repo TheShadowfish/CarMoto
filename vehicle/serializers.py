@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from vehicle.models import Car, Moto, Mileage
+from vehicle.validators import TitleValidator
 
 
 class MileageSerializer(serializers.ModelSerializer):
@@ -20,6 +21,10 @@ class MotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Moto
         fields = '__all__'
+        validators = [
+            TitleValidator(field='title'),
+            serializers.UniqueTogetherValidator(fields=['title', 'description'], queryset=Moto.objects.all())
+        ]
 
     def get_last_mileage(self, instance):
         if instance.mileage.all().first():
@@ -33,6 +38,10 @@ class MotoMileageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mileage
         fields = ('mileage', 'year', 'moto',)
+        validators = [
+            TitleValidator(field='title'),
+            serializers.UniqueTogetherValidator(fields=['title', 'description'], queryset=Moto.objects.all())
+        ]
 
 
 class MotoCreateSerializer(serializers.ModelSerializer):
@@ -40,6 +49,10 @@ class MotoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Moto
         fields = '__all__'
+        validators=[
+            TitleValidator(field='title'),
+            serializers.UniqueTogetherValidator(fields=['title','description'], queryset=Moto.objects.all())
+        ]
 
     def create(self, validated_data):
         mileage = validated_data.pop('mileage')
