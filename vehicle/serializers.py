@@ -19,7 +19,7 @@ class CarSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_usd_price(self, instance):
-        return convert_currencies(instance)
+        return convert_currencies(instance.amount)
 
 
 class MotoSerializer(serializers.ModelSerializer):
