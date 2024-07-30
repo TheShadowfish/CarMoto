@@ -30,6 +30,8 @@ def my_task():
 
 
 def check_filter():
-    filter_price = {"price__lte": 500}
+    print("Отчет по фильтру 1")
+    filter_price = {'price__lte':1500}
+
     if Car.objects.filter(**filter_price).exist():
         print("Отчет по фильтру")
