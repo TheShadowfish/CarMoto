@@ -11,6 +11,9 @@ from vehicle.serializers import CarSerializer, MotoSerializer, MileageSerializer
     MotoCreateSerializer
 from django_filters import rest_framework as filters
 
+from vehicle.tasks import check_mileage
+
+
 class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
@@ -51,6 +54,13 @@ class MotoDestroyAPIView(generics.DestroyAPIView):
 
 class MileageCreateAPIView(generics.CreateAPIView):
     serializer_class = MileageSerializer
+    def perform_create(self, serializer):
+        new_mileage = serializer.save()
+        if new_mileage.car:
+            #check_mileage
+            check_mileage.delay(new_mileage.car_id, 'Car')
+        else:
+            check_mileage.delay(new_mileage.moto_id, 'Moto')
 
 
 class MotoMileageListAPIView(generics.ListAPIView):
